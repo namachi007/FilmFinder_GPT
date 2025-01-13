@@ -16,7 +16,7 @@ const Header = () => {
       if (user) {
         // User is signed in
         const { uid, email, displayName } = user;
-        console.log(uid, email, displayName);
+        
         dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
         navigate("/browse");
       } else {
@@ -25,7 +25,7 @@ const Header = () => {
         navigate("/");
       }
     });
-  });
+  },[]);
 
     return (
       <div className="App absolute  blur-none bg-gradient-to-br  px- z-10  flex">
