@@ -2,9 +2,12 @@ import Header from './Header';
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import useFetchingMovies from '../Hooks/useFetchingMovies';
+import useFetchingMovies from '../Hooks/useFetchingNowPlayingMovies';
 import { MainContainer } from './MainContainer';
 import { SecondaryContainer } from './SecondaryContainer';
+import useFetchingPopularMovies from "../Hooks/useFetchingPopularMovies";
+import useFetchingTopRatedMovies from "../Hooks/useFetchingTopRatedMovies";
+import useUpcomingMovies from "../Hooks/useUpcomingMovies";
 
 
 const Browse = () => {
@@ -22,6 +25,9 @@ const handleSignOut = () => {
 }
 
   useFetchingMovies();
+  useFetchingPopularMovies();
+  useFetchingTopRatedMovies();
+  useUpcomingMovies();
 
   return (
     <div className="relative min-h-screen">
