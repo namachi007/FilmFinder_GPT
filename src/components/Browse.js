@@ -24,8 +24,8 @@ const handleSignOut = () => {
   useFetchingMovies();
 
   return (
-    <div>
-      <div>
+    <div className="relative min-h-screen">
+      <div className="relative min-h-screen">
         <Header />
         <div className="absolute top-2 right-10 p-4 z-50">
           <button
@@ -35,8 +35,10 @@ const handleSignOut = () => {
             Sign Out
           </button>
         </div>
-        <MainContainer />
-        <SecondaryContainer />
+        <div className="flex flex-col">
+          <MainContainer />
+          <SecondaryContainer />
+        </div>
       </div>
     </div>
   );

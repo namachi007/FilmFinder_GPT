@@ -18,15 +18,15 @@ export const VideoBackground = ({movieId}) => {
         }
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        style={{
-          // Matches 16:9 aspect ratio to fill width
-          height: "100vh", // Full screen height
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          objectFit: "cover",
-        }}
+        // style={{
+        //   // Matches 16:9 aspect ratio to fill width
+        //   height: "100vh", // Full screen height
+        //   position: "absolute",
+        //   top: "50%",
+        //   left: "50%",
+        //   transform: "translate(-50%, -50%)",
+        //   objectFit: "cover",
+        // }}
       ></iframe>
     </div>
   );
