@@ -11,6 +11,8 @@ import useUpcomingMovies from "../Hooks/useUpcomingMovies";
 import { toggleGptSearch } from '../utils/gptSeach';
 import { useDispatch, useSelector } from 'react-redux';
 import { GptSearchMain } from './GptSearchMain';
+import { Supported_Language } from '../utils/constants';
+import { changeConfigLanguage } from '../utils/configSlice'; 
 
 
 const Browse = () => {
@@ -29,6 +31,11 @@ const handleSignOut = () => {
     });
 }
 
+
+const handleLanguageChange = (e) => {
+   dispatch(changeConfigLanguage(e.target.value));
+}
+
 const toggleGpt = () => {
   dispatch(toggleGptSearch());
 }
@@ -43,22 +50,40 @@ const toggleGpt = () => {
       <div className="relative min-h-screen">
         <Header />
         <div className="absolute top-2 right-10 p-4 z-50 flex ">
+          {showGptSearch && (
+            <select
+              className="bg-gray-700 text-white p-1 rounded-lg bg-opacity-70"
+              onChange={handleLanguageChange}
+            >
+              {Supported_Language.map((lang) => (
+                <option key={lang.indentifier} value={lang.indentifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          )}
+
           <button
             onClick={toggleGpt}
             className="w-36 mx-6 h-18 p-1 px-3 bg-slate-500 bg-opacity-50 cursor-pointer text-md text-white font-medium rounded-md hover:shadow-[0_8px_20px_rgba(32,_198,_219,_0.7)] flex items-center justify-center space-x-2"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-search"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-            </svg>
-            {"  "}
-            <span>GPT Search</span>
+            {showGptSearch ? (
+              "Home Page"
+            ) : (
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />{" "}
+                </svg>
+                <span>GPT Search</span>
+              </>
+            )}
           </button>
           <button
             onClick={handleSignOut}
