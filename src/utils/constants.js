@@ -5,12 +5,12 @@ export const backgroundImg =
     "https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png";
 
     export const apiOptions = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDI2NjMwZjc0NGZmYjBkYzUzNDYwNTVlNmRmNzlmMyIsIm5iZiI6MTczNjY4MDYwNC43NDgsInN1YiI6IjY3ODNhNDljYmQ3OTNjMDM1NDRlOTJkMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.bhdY2QUsecL2pyIU3RCr8NQZzDFRcdM_d9ZRt48KqF8'
-  }
-};
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: "Bearer " + process.env.REACT_APP_TMDB_KEY,
+      },
+    };
 
 
 export const BG_URL_Netflix =
@@ -22,3 +22,7 @@ export const BG_URL_Netflix =
     { indentifier: "tamil", name: "Tamil" },
     { indentifier: "hindi", name: "Hindi" },
   ];
+
+
+  export const OPEN_AI_KEY = process.env.REACT_APP_OPEN_AI_KEY;
+  

@@ -29,7 +29,6 @@ const handleButtonClick = () => {
   if(isSignIn === false) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up
         const user = userCredential.user;
       })
       .catch((error) => {
@@ -37,7 +36,6 @@ const handleButtonClick = () => {
         const errorMessage = error.message;
          console.error("Error:", error.message);
         setError(errorMessage);
-        // ..
       });
   } else {
     signInWithEmailAndPassword(auth, email, password)

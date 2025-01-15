@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GptSearchMain } from './GptSearchMain';
 import { Supported_Language } from '../utils/constants';
 import { changeConfigLanguage } from '../utils/configSlice'; 
+import { GptSearchSuggestions } from './GptSearchSuggestions';
 
 
 const Browse = () => {
@@ -93,7 +94,10 @@ const toggleGpt = () => {
           </button>
         </div>
         {showGptSearch ? (
-          <GptSearchMain />
+          <div className='flex flex-col'>
+            <GptSearchMain />
+            <GptSearchSuggestions />
+          </div>
         ) : (
           <div className="flex flex-col">
             <MainContainer />
