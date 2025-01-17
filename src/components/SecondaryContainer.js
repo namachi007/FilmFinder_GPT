@@ -9,7 +9,7 @@ export const SecondaryContainer = () => {
   
 
   return (
-    <div className="text-white w-full bg-black ">
+    <div className="text-white w-full bg-black md:w-screen ">
       {/*
         MovieList-Popular 
           -MovieCard * n
@@ -18,7 +18,7 @@ export const SecondaryContainer = () => {
           ....
       */}
 
-      <div className="-mt-32 ml-10 relative z-10 bg-opacity-20">
+      <div className="md:-mt-32 mt-72 ml-7   md:ml-10 relative z-10 bg-opacity-20">
         <MovieList title={"Now Playing"} movies={Movies.nowPlayingMovies} />
         <MovieList title={"Popular"} movies={Movies.popularMovies} />
         <MovieList title={"Top Rated"} movies={Movies.topRatedMovies} />

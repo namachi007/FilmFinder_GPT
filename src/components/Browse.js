@@ -47,13 +47,13 @@ const toggleGpt = () => {
   useUpcomingMovies();
 
   return (
-    <div className="relative min-h-screen">
-      <div className="relative min-h-screen">
+    <div className="relative ">
+      <div className="relative ">
         <Header />
-        <div className="absolute top-2 right-10 p-4 z-50 flex ">
+        <div className="absolute md:top-2 md:right-10 md:p-4 p-2 z-50 flex flex-col md:flex-row items-center  right-2   md:mt-0 md:ml-0 ">
           {showGptSearch && (
             <select
-              className="bg-gray-700 text-white p-1 rounded-lg bg-opacity-70"
+              className="bg-gray-700 text-white md:p-1  md:text-[15px] p-[2px] rounded-lg bg-opacity-70 md:text-md text-[12px] "
               onChange={handleLanguageChange}
             >
               {Supported_Language.map((lang) => (
@@ -66,7 +66,7 @@ const toggleGpt = () => {
 
           <button
             onClick={toggleGpt}
-            className="w-36 mx-6 h-18 p-1 px-3 bg-slate-500 bg-opacity-50 cursor-pointer text-md text-white font-medium rounded-md hover:shadow-[0_8px_20px_rgba(32,_198,_219,_0.7)] flex items-center justify-center space-x-2"
+            className="md:w-32  mx-6 my-3 h-18 p-1 px-2 md-p-auto bg-slate-500 bg-opacity-50 cursor-pointer md:text-[15px] text-[10px] text-white font-medium rounded-md hover:shadow-[0_8px_20px_rgba(32,_198,_219,_0.7)] flex items-center justify-center space-x-2"
           >
             {showGptSearch ? (
               "Home Page"
@@ -74,7 +74,7 @@ const toggleGpt = () => {
               <>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
+                  width="12"
                   height="16"
                   fill="currentColor"
                   class="bi bi-search"
@@ -88,18 +88,18 @@ const toggleGpt = () => {
           </button>
           <button
             onClick={handleSignOut}
-            className="w-24 h-8 p-1 border-red-600 bg-red-600 cursor-pointer text-md text-white font-medium rounded-md hover:bg-red-700"
+            className="md:w-24 w-20 md:h-8 h-6 md:p-1  md:text-[15px] border-red-600 bg-red-600 cursor-pointer md:text-md text-[10px] text-white font-medium rounded-md hover:bg-red-700"
           >
             Sign Out
           </button>
         </div>
         {showGptSearch ? (
-          <div className='flex flex-col'>
+          <div className="flex flex-col">
             <GptSearchMain />
             <GptSearchSuggestions />
           </div>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <MainContainer />
             <SecondaryContainer />
           </div>

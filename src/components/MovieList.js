@@ -4,8 +4,22 @@ import { useRef } from 'react';
 
 export const MovieList = ({title, movies}) => {
   const scrollRef = useRef(null);
+  let startX = 0;
+  let scrollLeft = 0;
 
-   const scrollLeft = () => {
+  const handleTouchStart = (e) => {
+    if (!scrollRef.current) return;
+    startX = e.touches[0].pageX;
+    scrollLeft = scrollRef.current.scrollLeft;
+  };
+
+  const handleTouchMove = (e) => {
+if (!scrollRef.current) return;
+    const moveX = e.touches[0].pageX - startX;
+    scrollRef.current.scrollLeft = scrollLeft - moveX;
+  };
+
+   const scrollleft = () => {
      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
    };
 
@@ -15,25 +29,27 @@ export const MovieList = ({title, movies}) => {
   
   return (
     movies && (
-      <div className="py-4 relative">
-        <h1 className="text-2xl font-semibold mb-5 ml-8">{title}</h1>
+      <div className="md:py-3 pb-6 relative md:w-full">
+        <h1 className="md:text-2xl text-md font-semibold mb-5 md:ml-8">{title}</h1>
         <div className="relative">
           <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 "
-            onClick={scrollLeft}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75  md:block hidden "
+            onClick={scrollleft}
           >
             ◀
           </button>
           <div
             ref={scrollRef}
-            className="flex overflow-x-scroll scrollbar-hide space-x-4 px-4"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            className="flex overflow-x-scroll scrollbar-hide space-x-4 md:px-4"
           >
             {movies.map((movie, index) => (
               <MovieCard key={index} moviePoster={movie?.poster_path} />
             ))}
           </div>
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75  md:block hidden"
             onClick={scrollRight}
           >
             ▶

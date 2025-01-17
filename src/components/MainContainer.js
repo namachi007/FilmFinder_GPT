@@ -12,7 +12,7 @@ export const MainContainer = () => {
     const {original_title, overview, id} = MainMovie
 
   return (
-    <div className="w-full h-screen relative flex flex-col ">
+    <div className="w-full md:h-screen  relative flex flex-col ">
       <VideoTitle title={original_title} overview={overview} />
       <VideoBackground movieId={id} />
     </div>
