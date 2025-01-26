@@ -47,17 +47,11 @@ export const GptSearchMain = () => {
    }, [searchQuery]);
 
    const tmdbApiCall = async (gptResults) => {
-     console.log("before api");
-    //  if (results === null) return;
-     console.log("after return");
      const data = gptResults.choices[0].message.content.split(",");
-     console.log(data);
      const promiseApiCall = data.map((movie) => serachMoviesTmdb(movie));
 
      let tmdbResults = await Promise.all(promiseApiCall);
-     console.log(tmdbResults);
       tmdbResults = tmdbResults.filter(movie => movie.length > 0);
-      console.log(tmdbResults);
      dispatch(addMovies({movieNames:data, tmdbResults: tmdbResults}));
    };
 
