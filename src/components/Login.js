@@ -53,7 +53,7 @@ const handleButtonClick = () => {
 }
 
 return (
-  <div>
+  <div className="bg-black">
     <Header />
     <div className=" relative w-full  overflow-hidden h-screen">
       <img

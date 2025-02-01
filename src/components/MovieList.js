@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 export const MovieList = ({title, movies}) => {
-  console.log(movies);
   const scrollRef = useRef(null);
   let startX = 0;
   let scrollLeft = 0;

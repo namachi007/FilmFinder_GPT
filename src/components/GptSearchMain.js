@@ -34,9 +34,7 @@ export const GptSearchMain = () => {
            messages: [{ role: "user", content: gptQuery }],
            model: "gpt-4o-mini",
          });
-
-         setResults(gptResults.choices[0].message.content); // Store the results
-         console.log("GPT Results:", gptResults);
+         setResults(gptResults.choices[0].message.content); 
          tmdbApiCall(gptResults);
        } catch (error) {
          console.error("Error fetching GPT results:", error.message);
@@ -49,7 +47,6 @@ export const GptSearchMain = () => {
    const tmdbApiCall = async (gptResults) => {
      const data = gptResults.choices[0].message.content.split(",");
      const promiseApiCall = data.map((movie) => serachMoviesTmdb(movie));
-
      let tmdbResults = await Promise.all(promiseApiCall);
       tmdbResults = tmdbResults.filter(movie => movie.length > 0);
      dispatch(addMovies({movieNames:data, tmdbResults: tmdbResults}));
