@@ -35,7 +35,7 @@ export const WatchPage = () => {
         setVideoNotAvailable(true);
       }
     } catch (error) {
-      console.error("Error fetching video data:", error);
+      console.error("Error fetching video:", error);
       setVideoNotAvailable(true);
     }
   };
