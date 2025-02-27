@@ -13,12 +13,23 @@ const useUpcomingMovies = () => {
   const upcomingmovies = useSelector((store) => store.movies.upcomingMovies);
 
   const getUpcomingMovies = async () => {
-    const data = await fetch(
-      `${TMDB_PROXY_BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}`,
-      apiOptionsWithKey
-    );
-    const response = await data.json();
-    dispatch(addupcomingMovies(response.results));
+    try {
+      const data = await fetch(
+        `${TMDB_PROXY_BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}`,
+        apiOptionsWithKey
+      );
+
+      if (!data.ok) {
+        throw new Error(`API request failed with status ${data.status}`);
+      }
+
+      const response = await data.json();
+      dispatch(addupcomingMovies(response.results));
+    } catch (error) {
+      console.error("Error fetching upcoming movies:", error);
+      // Dispatch empty array to avoid UI errors
+      dispatch(addupcomingMovies([]));
+    }
   };
 
   useEffect(() => {

@@ -12,12 +12,22 @@ const useFetchingMovies = () => {
   const popularmovies = useSelector((store) => store.movies.popularMovies);
 
   const getPopularMovies = async () => {
-    const data = await fetch(
-      `${TMDB_PROXY_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}`,
-      apiOptionsWithKey
-    );
-    const response = await data.json();
-    dispatch(addPopularMovies(response.results));
+    try {
+      const data = await fetch(
+        `${TMDB_PROXY_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}`,
+        apiOptionsWithKey
+      );
+
+      if (!data.ok) {
+        throw new Error(`API request failed with status ${data.status}`);
+      }
+
+      const response = await data.json();
+      dispatch(addPopularMovies(response.results));
+    } catch (error) {
+      console.error("Error fetching popular movies:", error);
+      dispatch(addPopularMovies([]));
+    }
   };
 
   useEffect(() => {

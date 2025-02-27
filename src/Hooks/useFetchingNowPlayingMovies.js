@@ -16,12 +16,23 @@ const useFetchingMovies = () => {
   );
 
   const getNowPlayingMovies = async () => {
-    const data = await fetch(
-      `${TMDB_PROXY_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&page=1`,
-      apiOptionsWithKey
-    );
-    const response = await data.json();
-    dispatch(addNowPlayingMovies(response.results));
+    try {
+      const data = await fetch(
+        `${TMDB_PROXY_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&page=1`,
+        apiOptionsWithKey
+      );
+
+      if (!data.ok) {
+        throw new Error(`API request failed with status ${data.status}`);
+      }
+
+      const response = await data.json();
+      dispatch(addNowPlayingMovies(response.results));
+    } catch (error) {
+      console.error("Error fetching now playing movies:", error);
+      // Dispatch empty array to avoid UI errors
+      dispatch(addNowPlayingMovies([]));
+    }
   };
 
   useEffect(() => {

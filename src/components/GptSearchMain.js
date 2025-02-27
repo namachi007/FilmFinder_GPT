@@ -18,6 +18,7 @@ export const GptSearchMain = () => {
   const [results, setResults] = useState(null);
   const [isClicked, setIsClicked] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const serachMoviesTmdb = async (movie) => {
     try {
@@ -30,11 +31,11 @@ export const GptSearchMain = () => {
           },
         }
       );
-      
+
       if (!data.ok) {
         throw new Error(`API request failed with status ${data.status}`);
       }
-      
+
       const json = await data.json();
       return json.results;
     } catch (error) {
@@ -47,7 +48,8 @@ export const GptSearchMain = () => {
   useEffect(() => {
     const fetchGptResults = async () => {
       if (searchQuery === "") return;
-      setNetworkError(false); 
+      setNetworkError(false);
+      setIsLoading(true); 
 
       try {
         const gptQuery = `Act as a recommendation system and suggest some very relevant movies for the query: ${searchQuery}. Only give names of 8 movies, comma-separated.`;
@@ -61,6 +63,7 @@ export const GptSearchMain = () => {
       } catch (error) {
         console.error("Error fetching GPT results:", error.message);
         setNetworkError(true);
+        setIsLoading(false); 
       }
     };
 
@@ -85,6 +88,8 @@ export const GptSearchMain = () => {
       console.error("Error in tmdbApiCall:", error);
       dispatch(addMovies({ movieNames: [], tmdbResults: [] }));
       setNetworkError(true);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -114,6 +119,13 @@ export const GptSearchMain = () => {
             {lang[currentLanguage].searchText}
           </h1>
 
+          {isLoading && (
+            <div className="flex flex-col justify-center items-center mb-6">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mb-3"></div>
+              <p className="text-white text-lg">Searching for movies...</p>
+            </div>
+          )}
+
           {networkError && (
             <div className="bg-red-600 text-white p-4 rounded-lg mb-6 max-w-2xl text-center">
               <h3 className="text-xl font-bold mb-2">
@@ -123,9 +135,7 @@ export const GptSearchMain = () => {
                 It appears that your internet service provider (Jio) is blocking
                 access to the movie database API.
               </p>
-              <p>
-                To use the search feature, please try:
-              </p>
+              <p>To use the search feature, please try:</p>
               <ul className="list-disc list-inside mt-2 mb-2">
                 <li>Using a different internet connection</li>
                 <li>Using a VPN service</li>
@@ -150,8 +160,9 @@ export const GptSearchMain = () => {
             <button
               className="bg-red-500 text-white md:p-3 p-2 md:w-32 w-20 rounded-lg ml-10 md:text-lg text-md font-bold"
               onClick={handleSearchClick}
+              disabled={isLoading}
             >
-              {lang[currentLanguage].find}
+              {isLoading ? "Searching..." : lang[currentLanguage].find}
             </button>
           </form>
         </div>
