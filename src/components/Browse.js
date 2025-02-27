@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import useFetchingMovies from "../Hooks/useFetchingNowPlayingMovies";
 import { MainContainer } from "./MainContainer";
 import { SecondaryContainer } from "./SecondaryContainer";
+import JoinReasons from "./JoinReasons";
+import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
 import useFetchingPopularMovies from "../Hooks/useFetchingPopularMovies";
 import useFetchingTopRatedMovies from "../Hooks/useFetchingTopRatedMovies";
 import useUpcomingMovies from "../Hooks/useUpcomingMovies";
@@ -211,7 +213,6 @@ const Browse = () => {
     };
   }, []);
 
- 
   useEffect(() => {
     if (showGptSearch) {
       setNetworkError(false);
@@ -426,6 +427,8 @@ const Browse = () => {
               <div className="flex flex-col">
                 <MainContainer />
                 <SecondaryContainer />
+                <JoinReasons />
+                <FrequentlyAskedQuestions />
               </div>
             )}
           </>
