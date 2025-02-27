@@ -1,5 +1,9 @@
 import { addTopRatedMovies } from "../utils/movieSlice";
-import { apiOptions } from "../utils/constants";
+import {
+  apiOptionsWithKey,
+  TMDB_PROXY_BASE_URL,
+  TMDB_API_KEY,
+} from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,16 +14,16 @@ const useFetchingTopRatedMovies = () => {
 
   const getTopRatedMovies = async () => {
     const data = await fetch(
-      "https://api.themoviedb.org/3/movie/top_rated",
-      apiOptions
+      `${TMDB_PROXY_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`,
+      apiOptionsWithKey
     );
     const response = await data.json();
     dispatch(addTopRatedMovies(response.results));
   };
 
   useEffect(() => {
-    if(!topRatedmovies) {
-    getTopRatedMovies();
+    if (!topRatedmovies) {
+      getTopRatedMovies();
     }
   }, []);
 };

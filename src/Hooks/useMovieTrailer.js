@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { apiOptions } from '../utils/constants';
-import { useDispatch } from 'react-redux';
-import { addVideoTrailer } from '../utils/movieSlice';
+import React, { useEffect, useState } from "react";
+import {
+  apiOptionsWithKey,
+  TMDB_PROXY_BASE_URL,
+  TMDB_API_KEY,
+} from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { addVideoTrailer } from "../utils/movieSlice";
 
 export const useMovieTrailer = (movieId) => {
-
   const dispatch = useDispatch();
   const getmovieTrailer = async () => {
     const data = await fetch(
-      "https://api.themoviedb.org/3/movie/"+ movieId +"/videos?language=en-US",
-      apiOptions
+      `${TMDB_PROXY_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=en-US`,
+      apiOptionsWithKey
     );
     const json = await data.json();
     const filteredTrailer = json.results.filter(
@@ -23,4 +26,4 @@ export const useMovieTrailer = (movieId) => {
   useEffect(() => {
     getmovieTrailer();
   }, []);
-}
+};

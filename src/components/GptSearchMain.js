@@ -1,69 +1,102 @@
 import React from "react";
-import { BG_URL_Netflix } from "../utils/constants";
+import {
+  BG_URL_Netflix,
+  apiOptionsWithKey,
+  TMDB_API_KEY,
+} from "../utils/constants";
 import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState, useEffect } from "react";
 import client from "../utils/openai";
-import {apiOptions} from "../utils/constants";
-import { addMovies } from "../utils/gptSeach"; 
+import { addMovies } from "../utils/gptSeach";
 
 export const GptSearchMain = () => {
   const dispatch = useDispatch();
   const currentLanguage = useSelector((store) => store.config.configLanguage);
   const searchText = useRef(null);
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const [results, setResults] = useState(null); 
-  const [isClicked, setIsClicked] = useState(false); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [results, setResults] = useState(null);
+  const [isClicked, setIsClicked] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
 
-  const serachMoviesTmdb = async(movie) => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/search/movie?query=" + movie + "&include_adult=false&language=en-US&page=1",
-      apiOptions
-    );
-    const json = await data.json();
-    return json.results;
-  } 
+  const serachMoviesTmdb = async (movie) => {
+    try {
+      const data = await fetch(
+        `https://api.themoviedb.org/3/search/movie?query=${movie}&api_key=${TMDB_API_KEY}&include_adult=false&language=en-US&page=1`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+      
+      if (!data.ok) {
+        throw new Error(`API request failed with status ${data.status}`);
+      }
+      
+      const json = await data.json();
+      return json.results;
+    } catch (error) {
+      console.error("Error in serachMoviesTmdb:", error);
+      setNetworkError(true);
+      return [];
+    }
+  };
 
-   useEffect(() => {
-     const fetchGptResults = async () => {
-       if (searchQuery === "") return; 
-       try {
-         const gptQuery = `Act as a recommendation system and suggest some very relevant movies for the query: ${searchQuery}. Only give names of 8 movies, comma-separated.`;
+  useEffect(() => {
+    const fetchGptResults = async () => {
+      if (searchQuery === "") return;
+      setNetworkError(false); 
 
-         const gptResults = await client.chat.completions.create({
-           messages: [{ role: "user", content: gptQuery }],
-           model: "gpt-4o-mini",
-         });
-         setResults(gptResults.choices[0].message.content); 
-         tmdbApiCall(gptResults);
-       } catch (error) {
-         console.error("Error fetching GPT results:", error.message);
-       }
-     };
+      try {
+        const gptQuery = `Act as a recommendation system and suggest some very relevant movies for the query: ${searchQuery}. Only give names of 8 movies, comma-separated.`;
 
-     fetchGptResults();
-   }, [searchQuery]);
+        const gptResults = await client.chat.completions.create({
+          messages: [{ role: "user", content: gptQuery }],
+          model: "gpt-4o-mini",
+        });
+        setResults(gptResults.choices[0].message.content);
+        tmdbApiCall(gptResults);
+      } catch (error) {
+        console.error("Error fetching GPT results:", error.message);
+        setNetworkError(true);
+      }
+    };
 
-   const tmdbApiCall = async (gptResults) => {
-     const data = gptResults.choices[0].message.content.split(",");
-     const promiseApiCall = data.map((movie) => serachMoviesTmdb(movie));
-     let tmdbResults = await Promise.all(promiseApiCall);
-      tmdbResults = tmdbResults.filter(movie => movie.length > 0);
-     dispatch(addMovies({movieNames:data, tmdbResults: tmdbResults}));
-   };
+    fetchGptResults();
+  }, [searchQuery]);
 
-  
+  const tmdbApiCall = async (gptResults) => {
+    try {
+      const data = gptResults.choices[0].message.content.split(",");
+      const promiseApiCall = data.map((movie) => serachMoviesTmdb(movie));
+      const settledResults = await Promise.allSettled(promiseApiCall);
+      let tmdbResults = settledResults
+        .filter((result) => result.status === "fulfilled")
+        .map((result) => result.value);
 
-   const handleSearchClick = () => {
+      tmdbResults = tmdbResults.filter(
+        (movie) => movie && Array.isArray(movie) && movie.length > 0
+      );
+
+      dispatch(addMovies({ movieNames: data, tmdbResults: tmdbResults }));
+    } catch (error) {
+      console.error("Error in tmdbApiCall:", error);
+      dispatch(addMovies({ movieNames: [], tmdbResults: [] }));
+      setNetworkError(true);
+    }
+  };
+
+  const handleSearchClick = () => {
     setIsClicked(true);
-     if (searchText.current && searchText.current.value) {
-       setSearchQuery(searchText.current.value.trim());
-     } else {
-       console.error("Input is null or empty!");
-     }
-   };
+    if (searchText.current && searchText.current.value) {
+      setSearchQuery(searchText.current.value.trim());
+    } else {
+      console.error("Input is null or empty!");
+    }
+  };
 
-   
   return (
     <div className="flex flex-col ">
       <div className=" relative w-full  overflow-hidden h-screen ">
@@ -80,6 +113,31 @@ export const GptSearchMain = () => {
           <h1 className="text-white md:text-4xl sm:text-2xl text-xl  font-extrabold mb-8 text-center">
             {lang[currentLanguage].searchText}
           </h1>
+
+          {networkError && (
+            <div className="bg-red-600 text-white p-4 rounded-lg mb-6 max-w-2xl text-center">
+              <h3 className="text-xl font-bold mb-2">
+                Network Restriction Detected
+              </h3>
+              <p className="mb-2">
+                It appears that your internet service provider (Jio) is blocking
+                access to the movie database API.
+              </p>
+              <p>
+                To use the search feature, please try:
+              </p>
+              <ul className="list-disc list-inside mt-2 mb-2">
+                <li>Using a different internet connection</li>
+                <li>Using a VPN service</li>
+                <li>Accessing this application later</li>
+              </ul>
+              <p className="mt-2">
+                You can still browse the main movie collections on the home
+                page.
+              </p>
+            </div>
+          )}
+
           <form
             className="flex justify-center items-center w-full "
             onSubmit={(e) => e.preventDefault()}

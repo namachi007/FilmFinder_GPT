@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { apiOptions } from "../utils/constants";
+import {
+  apiOptionsWithKey,
+  TMDB_PROXY_BASE_URL,
+  TMDB_API_KEY,
+} from "../utils/constants";
 import { useSearchParams } from "react-router";
 
 export const WatchPage = () => {
@@ -16,10 +20,10 @@ export const WatchPage = () => {
   const getYtData = async () => {
     try {
       const response = await fetch(
-        "https://api.themoviedb.org/3/movie/" +
-          searchParams.get("v") +
-          "/videos?language=en-US",
-        apiOptions
+        `${TMDB_PROXY_BASE_URL}/movie/${searchParams.get(
+          "v"
+        )}/videos?api_key=${TMDB_API_KEY}&language=en-US`,
+        apiOptionsWithKey
       );
       const json = await response.json();
       if (json?.results && json.results.length > 0) {

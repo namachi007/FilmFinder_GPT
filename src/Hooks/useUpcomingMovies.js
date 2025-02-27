@@ -1,5 +1,9 @@
 import { addupcomingMovies } from "../utils/movieSlice";
-import { apiOptions } from "../utils/constants";
+import {
+  apiOptionsWithKey,
+  TMDB_PROXY_BASE_URL,
+  TMDB_API_KEY,
+} from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,15 +14,17 @@ const useUpcomingMovies = () => {
 
   const getUpcomingMovies = async () => {
     const data = await fetch(
-      "https://api.themoviedb.org/3/movie/upcoming",
-      apiOptions
+      `${TMDB_PROXY_BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}`,
+      apiOptionsWithKey
     );
     const response = await data.json();
     dispatch(addupcomingMovies(response.results));
   };
 
   useEffect(() => {
-    if (!upcomingmovies) { getUpcomingMovies();}
+    if (!upcomingmovies) {
+      getUpcomingMovies();
+    }
   }, []);
 };
 
