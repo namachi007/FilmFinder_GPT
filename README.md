@@ -1,8 +1,8 @@
-# Netflix-GPT
+# FilmFinder GPT
 
 [Link](https://netflixgpt-gold.vercel.app/)  
 
-Netflix-GPT is a modern movie browsing application that integrates GPT-3.5 Turbo for enhanced search functionality. It leverages the TMDB API for movie data and allows users to watch YouTube trailers by clicking on movie thumbnails. The app is built with React, Redux, Tailwind CSS, and Firebase authentication, providing a responsive and engaging user experience.
+FilmFinder GPT is a modern movie browsing application that integrates GPT-3.5 Turbo for enhanced search functionality. It's inspired by Netflix's interface. It leverages the TMDB API for movie data and allows users to watch YouTube trailers by clicking on movie thumbnails. The app is built with React, Redux, Tailwind CSS, and Firebase authentication, providing a responsive and engaging user experience.
 
 ## Features
 
@@ -35,7 +35,7 @@ Netflix-GPT is a modern movie browsing application that integrates GPT-3.5 Turbo
 
 ## Technologies Used
 
-- **Frontend:** React, Redux, Tailwind CSS
+- **Frontend:** React, Redux, Javascript, Tailwind CSS
 - **Backend/Authentication:** Firebase Authentication
 - **API:** TMDB API, OpenAI GPT-3.5 Turbo API
 - **Deployment:** Vercel
